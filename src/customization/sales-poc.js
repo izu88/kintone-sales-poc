@@ -6,7 +6,7 @@
     status: 'ステータス',
   };
 
-  const SPACE_ID = 'alert_space';
+  const ALERT_ID = 'deadline-alert';
   const CLOSED_STATUSES = new Set(['受注', '失注']);
 
   /**
@@ -37,30 +37,34 @@
   };
 
   /**
-   * 期限超過警告を表示する。
+   * 詳細画面上部に期限超過警告を表示する。
+   * 警告対象外の場合は要素自体を生成しないため、
+   * フォーム上に不要な余白が残らない。
    */
   const renderDeadlineAlert = (record) => {
-    const spaceElement = kintone.app.record.getSpaceElement(SPACE_ID);
+    const headerSpace = kintone.app.record.getHeaderMenuSpaceElement();
 
-    if (!spaceElement) {
+    if (!headerSpace) {
       console.warn(
-        `[kintone-sales-poc] スペースフィールド "${SPACE_ID}" が見つかりません。`
+        '[kintone-sales-poc] ヘッダー表示領域を取得できませんでした。'
       );
       return;
     }
 
-    // 詳細画面の再描画時に重複表示しないよう初期化する。
-    spaceElement.replaceChildren();
+    // 再描画時の重複を防ぐ。
+    headerSpace.querySelector(`#${ALERT_ID}`)?.remove();
 
     if (!isOverdue(record)) {
       return;
     }
 
     const alertElement = document.createElement('div');
+    alertElement.id = ALERT_ID;
     alertElement.setAttribute('role', 'alert');
     alertElement.textContent = '⚠ 次回対応期限を過ぎています';
 
     Object.assign(alertElement.style, {
+      margin: '8px 0',
       padding: '12px 16px',
       border: '1px solid #d93025',
       borderRadius: '4px',
@@ -69,7 +73,7 @@
       fontWeight: '700',
     });
 
-    spaceElement.appendChild(alertElement);
+    headerSpace.appendChild(alertElement);
   };
 
   kintone.events.on('app.record.detail.show', (event) => {
