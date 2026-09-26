@@ -1,0 +1,15 @@
+{
+  "name": "kintone-sales-poc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "api:list": "node --env-file=.env src/api/list-records.js",
+    "api:create": "node --env-file=.env src/api/create-record.js",
+    "api:update": "node --env-file=.env src/api/update-record.js",
+    "api:status": "node --env-file=.env src/api/update-status.js"
+  }
+}
