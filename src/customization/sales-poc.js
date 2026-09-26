@@ -4,6 +4,8 @@
   const FIELD_CODES = {
     nextActionDate: 'next_action_date',
     status: 'ステータス',
+    amount: 'amount',
+    lostReason: 'lost_reason',
   };
 
   const ALERT_ID = 'deadline-alert';
@@ -38,8 +40,6 @@
 
   /**
    * 詳細画面上部に期限超過警告を表示する。
-   * 警告対象外の場合は要素自体を生成しないため、
-   * フォーム上に不要な余白が残らない。
    */
   const renderDeadlineAlert = (record) => {
     const headerSpace = kintone.app.record.getHeaderMenuSpaceElement();
@@ -51,7 +51,6 @@
       return;
     }
 
-    // 再描画時の重複を防ぐ。
     headerSpace.querySelector(`#${ALERT_ID}`)?.remove();
 
     if (!isOverdue(record)) {
@@ -76,8 +75,36 @@
     headerSpace.appendChild(alertElement);
   };
 
+  /**
+   * プロセス遷移前の業務ルールを検証する。
+   *
+   * - 受注へ進む場合は金額必須
+   * - 失注へ進む場合は失注理由必須
+   */
+  const validateProcessTransition = (event) => {
+    const record = event.record;
+    const nextStatus = event.nextStatus?.value;
+
+    if (nextStatus === '受注' && !record[FIELD_CODES.amount]?.value) {
+      event.error = '受注にするには金額を入力してください。';
+      return event;
+    }
+
+    if (nextStatus === '失注' && !record[FIELD_CODES.lostReason]?.value) {
+      event.error = '失注にするには失注理由を選択してください。';
+      return event;
+    }
+
+    return event;
+  };
+
   kintone.events.on('app.record.detail.show', (event) => {
     renderDeadlineAlert(event.record);
     return event;
   });
+
+  kintone.events.on(
+    'app.record.detail.process.proceed',
+    validateProcessTransition
+  );
 })();
