@@ -18,7 +18,7 @@ const records = result.records.map((record) => ({
   nextAction: record.next_action?.value,
   nextActionDate: record.next_action_date?.value,
   amount: record.amount?.value,
-  status: record.ステータス?.value,
+  status: record['ステータス']?.value,
 }));
 
 console.table(records);
