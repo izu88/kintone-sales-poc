@@ -35,6 +35,22 @@ KINTONE_APP_ID=1
 KINTONE_API_TOKEN=YOUR_API_TOKEN
 ```
 
+### 値の形式
+
+`KINTONE_BASE_URL` はドメイン部分だけを指定します。
+
+```text
+OK: https://example.cybozu.com
+NG: https://example.cybozu.com/k/123/
+```
+
+`KINTONE_APP_ID` は数字だけを指定します。
+
+```text
+OK: 123
+NG: /k/123/
+```
+
 ## 3. APIを実行
 
 ### GET: 商談一覧
@@ -42,6 +58,9 @@ KINTONE_API_TOKEN=YOUR_API_TOKEN
 ```bash
 npm run api:list
 ```
+
+最初のGETは `app` パラメーターだけの最小リクエストで接続確認します。
+GETではJSONボディを送らないため、`Content-Type: application/json` は付与しません。
 
 ### POST: サンプル商談登録
 
@@ -74,6 +93,18 @@ APIトークン認証でプロセス管理のステータスを更新する場�
 
 このPoCでは作業者を固定しないシンプルなプロセスを前提とします。
 実案件で作業者を設定する場合は、API実行ユーザー相当の権限・アクション実行条件を確認してください。
+
+## トラブルシュート
+
+### CB_IL02 / Invalid request
+
+次を確認します。
+
+1. `KINTONE_BASE_URL` に `/k/...` を含めていない
+2. `KINTONE_APP_ID` が数字だけ
+3. APIトークン発行後に「アプリを更新」している
+4. GETリクエストに不要な `Content-Type: application/json` を付けていない
+5. まず `app` だけのGETで接続確認する
 
 ## 検証項目
 
