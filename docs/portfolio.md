@@ -74,11 +74,23 @@ kintoneへ商談登録
 - プロセス管理
 - 受注 / 失注までの進捗管理
 
+![商談一覧](images/01-sales-list.png)
+
 ### JavaScriptカスタマイズ
 
 - 期限超過案件への警告表示
 - 受注時の金額必須チェック
 - 失注時の失注理由必須チェック
+
+![期限超過警告](images/02-deadline-alert.png)
+
+#### 受注時バリデーション
+
+![受注時バリデーション](images/03-process-validation-orders.png)
+
+#### 失注時バリデーション
+
+![失注時バリデーション](images/04-process-validation-lost.png)
 
 ### REST API連携
 
@@ -91,6 +103,8 @@ Node.js 20+ の標準 `fetch` を利用して、次を実機検証しました�
 
 APIで作成したレコードについて、商談確度・次回アクション・次回対応日を更新し、
 さらに「新規」から「初回対応」へプロセス遷移できることまで確認しています。
+
+![REST API一覧取得](images/05-rest-api-list.png)
 
 ## 技術選定の考え方
 
