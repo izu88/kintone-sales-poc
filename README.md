@@ -7,6 +7,20 @@ BtoB営業部門の商談管理を題材にした、kintone業務改善PoCです
 Excel・メール・個人管理に分散した営業情報をkintoneへ集約し、
 商談進捗、担当者、次回対応、商談確度、金額などを一元管理します。
 
+## デモ
+
+### 商談一覧
+
+![商談一覧](docs/images/01-sales-list.png)
+
+### 期限超過警告
+
+![期限超過警告](docs/images/02-deadline-alert.png)
+
+### REST API実機確認
+
+![REST API一覧取得](docs/images/05-rest-api-list.png)
+
 ## 想定課題
 
 - 商談情報が複数ツールに分散している
@@ -27,7 +41,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 - [x] 受注・失注時の業務ルール制御
 - [x] REST API実機検証（GET / POST / PUT / プロセス遷移）
 - [x] APIテスト結果反映
-- [ ] kintone編のポートフォリオ仕上げ
+- [x] kintone編のポートフォリオ仕上げ
 - [ ] n8n連携
 - [ ] Dify連携
 - [ ] n8n + Dify + kintone統合PoC
@@ -62,6 +76,11 @@ Node.js 20+ の標準 `fetch` を利用し、外部から次の操作を実機�
 
 セットアップと実行方法は `docs/rest-api.md` を参照してください。
 
+## ポートフォリオ
+
+- ケーススタディ: `docs/portfolio.md`
+- スクリーンショット一覧: `docs/screenshots.md`
+
 ## アプリの主なフィールド
 
 | 項目 | フィールドコード |
@@ -94,10 +113,13 @@ Node.js 20+ の標準 `fetch` を利用し、外部から次の操作を実機�
 ├─ data/
 │  └─ dummy-sales.csv
 ├─ docs/
+│  ├─ images/
 │  ├─ as-is.md
 │  ├─ to-be.md
 │  ├─ app-design.md
+│  ├─ portfolio.md
 │  ├─ rest-api.md
+│  ├─ screenshots.md
 │  └─ test-plan.md
 └─ src/
    ├─ customization/
