@@ -106,6 +106,38 @@ APIで作成したレコードについて、商談確度・次回アクショ�
 
 ![REST API一覧取得](images/05-rest-api-list.png)
 
+### n8n連携
+
+n8n Community EditionをDocker Composeでローカル起動し、Web問い合わせからkintone登録までのWorkflowを構築しました。
+
+\`\`\`text
+Webhook
+↓
+問い合わせデータ整形
+↓
+必須項目チェック
+├─ false → 400 入力エラー
+└─ true
+    ↓
+  kintone商談登録
+    ↓
+  kintone API結果判定
+    ├─ success → 201 登録成功
+    └─ error   → 502 APIエラー
+\`\`\`
+
+Production Webhookで次を実機確認しています。
+
+- 正常登録：\`201 Created\`
+- 必須項目不足：\`400 Bad Request\`
+- kintone API失敗：\`502 Bad Gateway\`
+- 正常登録時に\`recordId\` / \`revision\` を返却
+- APIトークンをWorkflow JSONへ直接保存せず、n8n Credentialsへ分離
+
+![n8n問い合わせ自動登録フロー](images/06-n8n-workflow.png)
+
+詳細は [n8n連携ドキュメント](n8n.md) を参照してください。
+
 ## 技術選定の考え方
 
 最初からすべてコードで作らず、kintone標準機能で解決できる範囲を優先しました。
@@ -113,11 +145,15 @@ APIで作成したレコードについて、商談確度・次回アクショ�
 そのうえで、標準機能だけでは不足する「期限超過警告」「業務ルール制御」をJavaScriptで追加し、
 外部システム連携に必要な操作をREST APIで検証しています。
 
+問い合わせ受付からkintone登録までの連携にはn8nを利用し、処理の可視化とエラーハンドリングをWorkflowとして分離しました。
+これにより、アプリ側の業務ロジックと外部連携処理を分けて管理できる構成にしています。
+
 ## 想定効果
 
 PoC段階のため実測値ではありませんが、導入時には次をKPI候補とします。
 
 - Excelへの転記件数
+- 問い合わせ受付からkintone登録までの処理時間
 - 商談情報確認に要する時間
 - 次回対応期限の超過件数
 - 必須情報の欠落件数
@@ -172,5 +208,7 @@ kintone
 - 標準機能とカスタマイズの使い分け
 - JavaScriptによる業務ルール実装
 - REST APIによる外部システム連携
+- n8nによるWebhook受付・入力検証・kintone自動登録
+- HTTPステータスを使った正常系 / 入力エラー / APIエラーの分岐
 - 認証情報をGit管理から分離した開発構成
 - テストケースを定義した実機検証
