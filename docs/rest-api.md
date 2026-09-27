@@ -1,0 +1,124 @@
+# REST API 検証
+
+## 目的
+
+Node.jsからkintone REST APIを呼び出し、外部システムから商談データを操作できることを確認します。
+
+## 前提
+
+- Node.js 20+
+- kintone「営業商談管理」アプリ
+- APIトークン
+- アプリID
+
+## 1. APIトークンを発行
+
+kintoneのアプリ設定から「APIトークン」を開き、トークンを生成します。
+
+PoCでは次の権限を有効にします。
+
+- レコード閲覧
+- レコード追加
+- レコード編集
+
+設定後は「保存」だけでなく「アプリを更新」まで実行してください。
+
+> APIトークンはGitにコミットしません。
+
+## 2. .envを作成
+
+`.env.example` をコピーして `.env` を作ります。
+
+```env
+KINTONE_BASE_URL=https://YOUR_SUBDOMAIN.cybozu.com
+KINTONE_APP_ID=1
+KINTONE_API_TOKEN=YOUR_API_TOKEN
+```
+
+### 値の形式
+
+`KINTONE_BASE_URL` はドメイン部分だけを指定します。
+
+```text
+OK: https://example.cybozu.com
+NG: https://example.cybozu.com/k/123/
+```
+
+`KINTONE_APP_ID` は数字だけを指定します。
+
+```text
+OK: 123
+NG: /k/123/
+```
+
+## 3. APIを実行
+
+### GET: 商談一覧
+
+```bash
+npm run api:list
+```
+
+最初のGETは `app` パラメーターだけの最小リクエストで接続確認します。
+GETではJSONボディを送らないため、`Content-Type: application/json` は付与しません。
+
+### POST: サンプル商談登録
+
+```bash
+npm run api:create
+```
+
+### PUT: 既存商談更新
+
+レコードID 10を更新する例:
+
+```bash
+npm run api:update -- 10
+```
+
+### PUT: プロセス管理のアクション実行
+
+レコードID 10で「初回対応へ」を実行する例:
+
+```bash
+npm run api:status -- 10 "初回対応へ"
+```
+
+ステータス名を直接上書きするのではなく、プロセス管理に登録した「アクション名」を指定します。
+
+### ステータス更新時の注意
+
+APIトークン認証でプロセス管理のステータスを更新する場合、
+作業者設定によっては実行条件が制限されます。
+
+このPoCでは作業者を固定しないシンプルなプロセスを前提とします。
+実案件で作業者を設定する場合は、API実行ユーザー相当の権限・アクション実行条件を確認してください。
+
+## トラブルシュート
+
+### CB_IL02 / Invalid request
+
+次を確認します。
+
+1. `KINTONE_BASE_URL` に `/k/...` を含めていない
+2. `KINTONE_APP_ID` が数字だけ
+3. APIトークン発行後に「アプリを更新」している
+4. GETリクエストに不要な `Content-Type: application/json` を付けていない
+5. まず `app` だけのGETで接続確認する
+
+## 検証項目
+
+| ID | 操作 | 期待結果 |
+| --- | --- | --- |
+| API01 | GET | 商談一覧をJSONから取得できる |
+| API02 | POST | kintoneに新規商談が作成される |
+| API03 | PUT | 商談確度・次回アクション・次回対応日が更新される |
+| API04 | Status PUT | 指定したプロセスアクションが実行される |
+| API05 | 認証情報未設定 | 実行前に環境変数エラーになる |
+
+## セキュリティ
+
+- APIトークンは `.env` のみに保存
+- `.env` は `.gitignore` 対象
+- READMEやスクリーンショットに実トークンを載せない
+- 実案件では必要最小限のAPI権限を設定

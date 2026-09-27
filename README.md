@@ -15,6 +15,23 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 - 商談ステータスを一覧で把握しづらい
 - 担当者ごとに記録粒度が異なる
 
+## 進捗
+
+- [x] kintone開発者環境
+- [x] 営業商談管理アプリ設計
+- [x] フォーム / フィールドコード
+- [x] プロセス管理
+- [x] 一覧
+- [x] ダミーデータ
+- [x] 期限超過警告
+- [x] 受注・失注時の業務ルール制御
+- [x] REST API実機検証（GET / POST / PUT / プロセス遷移）
+- [x] APIテスト結果反映
+- [ ] kintone編のポートフォリオ仕上げ
+- [ ] n8n連携
+- [ ] Dify連携
+- [ ] n8n + Dify + kintone統合PoC
+
 ## PoC範囲
 
 1. kintoneアプリ設計
@@ -24,6 +41,26 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 5. REST API連携
 6. テスト
 7. As-Is / To-Be整理
+
+## JavaScriptカスタマイズ
+
+- 次回対応期限を過ぎた未完了案件に警告を表示
+- 「受注」へ進む場合は金額を必須化
+- 「失注」へ進む場合は失注理由を必須化
+
+## REST API
+
+Node.js 20+ の標準 `fetch` を利用し、外部から次の操作を実機検証しました。
+
+- 商談一覧取得（GET） ✅
+- 新規商談登録（POST） ✅
+- 商談更新（PUT） ✅
+- プロセス管理のアクション実行（PUT） ✅
+
+実機検証では、APIで作成したレコードを取得し、商談確度・次回アクション・次回対応日を更新後、
+プロセス管理を「新規」から「初回対応」へ遷移できることまで確認しています。
+
+セットアップと実行方法は `docs/rest-api.md` を参照してください。
 
 ## アプリの主なフィールド
 
@@ -51,6 +88,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 ```text
 .
 ├─ README.md
+├─ package.json
 ├─ .env.example
 ├─ .gitignore
 ├─ data/
@@ -59,20 +97,21 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 │  ├─ as-is.md
 │  ├─ to-be.md
 │  ├─ app-design.md
+│  ├─ rest-api.md
 │  └─ test-plan.md
 └─ src/
    ├─ customization/
    │  └─ sales-poc.js
    └─ api/
-      └─ README.md
+      ├─ kintone-client.js
+      ├─ list-records.js
+      ├─ create-record.js
+      ├─ update-record.js
+      └─ update-status.js
 ```
 
 ## 今後の拡張
 
-- 期限超過警告
-- 受注時の金額必須チェック
-- 失注時の失注理由必須チェック
-- kintone REST API連携
 - n8nによる問い合わせ自動登録
 - Difyによる要約・分類・次回アクション生成
 - Teams等への通知
