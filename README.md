@@ -114,6 +114,8 @@ Production Webhookで次のケースを確認済みです。
 
 kintone APIトークンはWorkflow JSONへ直接保存せず、n8n Credentialsへ分離しています。
 
+セットアップ、Workflow構成、Webhook、テスト結果の詳細は `docs/n8n.md` を参照してください。
+
 ## ポートフォリオ
 
 - ケーススタディ: `docs/portfolio.md`
@@ -157,6 +159,7 @@ kintone APIトークンはWorkflow JSONへ直接保存せず、n8n Credentials�
 │  ├─ app-design.md
 │  ├─ portfolio.md
 │  ├─ rest-api.md
+│  ├─ n8n.md
 │  ├─ screenshots.md
 │  └─ test-plan.md
 ├─ n8n/
