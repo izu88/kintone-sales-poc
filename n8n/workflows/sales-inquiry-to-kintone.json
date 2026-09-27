@@ -1,0 +1,391 @@
+{
+  "name": "Sales Inquiry → kintone",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sales-inquiry",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "bad7d79f-86b5-4f14-992b-11dc92738ee2",
+      "name": "Webhook",
+      "webhookId": "11a48984-f0a6-4650-b443-f809aaa9fd60"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61eb33e1-6aa9-4a66-8537-f540634420e2",
+              "name": "company_name",
+              "value": "={{ $json.body.company_name }}",
+              "type": "string"
+            },
+            {
+              "id": "3c5c7484-50d2-4c6e-987c-9759a7a1cadf",
+              "name": "contact_name",
+              "value": "={{ $json.body.contact_name }}",
+              "type": "string"
+            },
+            {
+              "id": "e82e8654-6f69-49e0-b61d-be9edff49d2f",
+              "name": "deal_name",
+              "value": "={{ $json.body.deal_name }}",
+              "type": "string"
+            },
+            {
+              "id": "88659842-bf6d-4163-a355-3a423346f513",
+              "name": "customer_issue",
+              "value": "={{ $json.body.customer_issue }}",
+              "type": "string"
+            },
+            {
+              "id": "131accef-29f5-4378-a2b7-0591bf908037",
+              "name": "lead_source",
+              "value": "={{ $json.body.lead_source }}",
+              "type": "string"
+            },
+            {
+              "id": "1eb48c37-ea8d-4ef9-a362-fbe86ba1b0e6",
+              "name": "=probability",
+              "value": "C",
+              "type": "string"
+            },
+            {
+              "id": "7d19ead5-97a3-42dc-9e43-170d367c4f68",
+              "name": "next_action",
+              "value": "初回連絡",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        96,
+        0
+      ],
+      "id": "d50ba008-900a-4a49-8bd7-d7c27d0c24e3",
+      "name": "問い合わせデータ整形"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c0cedee5-8143-4fd0-9e0d-656c94dc5585",
+              "leftValue": "={{ $json.company_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8ab8038f-312b-4465-ba1e-b6cb7141319b",
+              "leftValue": "{{ $json.deal_name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        272,
+        0
+      ],
+      "id": "183aa0a2-bb69-4315-9352-4fa1222c8e92",
+      "name": "必須項目チェック"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"必須項目が不足しています。\",\n  \"required\": [\n    \"company_name\",\n    \"deal_name\"\n  ]\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        496,
+        192
+      ],
+      "id": "c24f55c7-27c6-47cb-8905-c0b8af1fe331",
+      "name": "400 入力エラー"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://a44c90frcmme.cybozu.com/k/v1/record.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"app\": 1,\n  \"record\": {\n    \"company_name\": {\n      \"value\": \"{{ $json.company_name }}\"\n    },\n    \"contact_name\": {\n      \"value\": \"{{ $json.contact_name }}\"\n    },\n    \"deal_name\": {\n      \"value\": \"{{ $json.deal_name }}\"\n    },\n    \"customer_issue\": {\n      \"value\": \"{{ $json.customer_issue }}\"\n    },\n    \"lead_source\": {\n      \"value\": \"{{ $json.lead_source }}\"\n    },\n    \"probability\": {\n      \"value\": \"{{ $json.probability }}\"\n    },\n    \"next_action\": {\n      \"value\": \"{{ $json.next_action }}\"\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        -16
+      ],
+      "id": "0fd2091e-f93a-404e-b798-11666decdd69",
+      "name": "kintone商談登録",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "q36EITa2lKggrGgy",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "de2b9be0-93ed-4d2e-99a7-0b98a64a5cbe",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "b3e5d4d0-bc0a-4fba-8a7a-db051822e01a",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 300,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        -16
+      ],
+      "id": "098bb802-c3bd-4a7a-ac0a-a4c19cff5a35",
+      "name": "kintone API結果判定"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1900a701-9172-49a0-91c7-42006ab9847b",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "6d923f64-06b0-4b6e-964f-c412dc9e7fd8",
+              "name": "message",
+              "value": "商談を登録しました。",
+              "type": "string"
+            },
+            {
+              "id": "39c8e0ae-0e92-482b-bdd3-7d311e65b291",
+              "name": "recordId",
+              "value": "={{ $json.body.id }}",
+              "type": "string"
+            },
+            {
+              "id": "168dcf1e-7950-4434-ad4a-8e6a23169ad5",
+              "name": "revision",
+              "value": "={{ $json.body.revision }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        976,
+        -16
+      ],
+      "id": "bea7544b-7012-4664-afcb-b20b8b9ef35a",
+      "name": "成功レスポンス整形"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1200,
+        -16
+      ],
+      "id": "bb05c642-00c6-46f2-a55a-7f78d1089bd1",
+      "name": "201 登録成功"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"kintoneへの登録に失敗しました。\"\n}",
+        "options": {
+          "responseCode": 502
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1200,
+        176
+      ],
+      "id": "6cab295a-c448-41b8-a08d-d612972d2729",
+      "name": "502 APIエラー"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "問い合わせデータ整形",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "問い合わせデータ整形": {
+      "main": [
+        [
+          {
+            "node": "必須項目チェック",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "必須項目チェック": {
+      "main": [
+        [
+          {
+            "node": "kintone商談登録",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "400 入力エラー",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kintone商談登録": {
+      "main": [
+        [
+          {
+            "node": "kintone API結果判定",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "kintone API結果判定": {
+      "main": [
+        [
+          {
+            "node": "成功レスポンス整形",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "502 APIエラー",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "成功レスポンス整形": {
+      "main": [
+        [
+          {
+            "node": "201 登録成功",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "201 登録成功": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5c5aab12-3fe6-46f3-adb3-fa055b4d7f87",
+  "meta": {
+    "instanceId": "50b6e4599a453a3b7c08de5bbea0743ccff5aa06b88b3e0e56779792800b66dc"
+  },
+  "nodeGroups": [],
+  "id": "yoHCSWFulsDTf9ri",
+  "tags": []
+}
