@@ -141,7 +141,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://a44c90frcmme.cybozu.com/k/v1/record.json",
+        "url": "https://YOUR_SUBDOMAIN.cybozu.com/k/v1/record.json",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -164,13 +164,7 @@
         -16
       ],
       "id": "0fd2091e-f93a-404e-b798-11666decdd69",
-      "name": "kintone商談登録",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "q36EITa2lKggrGgy",
-          "name": "Header Auth account"
-        }
-      }
+      "name": "kintone商談登録"
     },
     {
       "parameters": {
