@@ -1,8 +1,9 @@
 import { getAppId, kintoneRequest } from './kintone-client.js';
 
+// まずは app のみで最小のGETを実行し、認証と接続を確認する。
+// 接続確認後に並び順などのquery条件を追加する。
 const params = new URLSearchParams({
   app: getAppId(),
-  query: 'order by next_action_date asc limit 100',
 });
 
 const result = await kintoneRequest(
