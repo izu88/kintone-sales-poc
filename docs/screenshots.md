@@ -10,7 +10,7 @@
 | `04-process-validation-lost.png` | 失注時バリデーション |
 | `05-rest-api-list.png` | REST API一覧取得 |
 | `06-n8n-workflow.png` | n8n問い合わせ自動登録フロー全体 |
-| `07-dify-workflow.jpg` | Dify営業問い合わせ分析Workflow全体 |
+| `07-dify-workflow.png` | Dify営業問い合わせ分析Workflow全体 |
 
 ## 注意
 
