@@ -1,0 +1,288 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: workflow
+  name: Sales Inquiry Analyzer
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openrouter:0.1.9@8f8c69f645a62eb917ae219cfb8b567e39707941fc06c755d565ebea6cd1d88a
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload: {}
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        iteration_id: null
+        loop_id: null
+        sourceType: start
+        targetType: llm
+      id: 1790606585009-source-1790606841954-target
+      source: '1790606585009'
+      sourceHandle: source
+      target: '1790606841954'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        iteration_id: null
+        loop_id: null
+        sourceType: llm
+        targetType: code
+      id: 1790606841954-source-1790612398490-target
+      source: '1790606841954'
+      sourceHandle: source
+      target: '1790612398490'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        iteration_id: null
+        loop_id: null
+        sourceType: code
+        targetType: end
+      id: 1790612398490-source-1790609753819-target
+      source: '1790612398490'
+      sourceHandle: source
+      target: '1790609753819'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: ユーザー入力
+        type: start
+        variables:
+        - default: '現在Excelで営業案件を管理しています。
+
+            担当者ごとに入力内容がバラバラで、対応漏れも発生しています。
+
+            kintoneやAIを使って営業管理を効率化したいです。'
+          hint: ''
+          label: inquiry_text
+          options: []
+          placeholder: ''
+          required: true
+          type: paragraph
+          variable: inquiry_text
+      height: 107
+      id: '1790606585009'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: openrouter/auto
+          provider: langgenius/openrouter/openrouter
+        prompt_template:
+        - id: c8589a71-9031-46d8-b62b-05cd34e67652
+          role: system
+          text: 'あなたはBtoB営業支援担当です。
+
+
+            問い合わせ内容を分析し、営業担当者が初回対応するために必要な情報を整理してください。
+
+
+            ルール:
+
+            - 入力に書かれていない事実は推測しない
+
+            - 問い合わせ内容を簡潔に要約する
+
+            - 顧客が解決したい課題を抽出する
+
+            - 問い合わせカテゴリを分類する
+
+            - 営業担当者が次に行うべき具体的なアクションを1つ提案する
+
+            - 日本語で出力する
+
+
+            category は以下のいずれかにしてください。
+
+            - 営業業務改善
+
+            - AI導入
+
+            - Web制作
+
+            - システム開発
+
+            - その他'
+        - id: 9df5d9d3-96fd-4c00-873c-79a668d45e3c
+          role: user
+          text: '以下の問い合わせ内容を分析してください。
+
+
+            問い合わせ内容:
+
+            {{{#1790606585009.inquiry_text#}}'
+        retry_config:
+          max_retries: 2
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        structured_output:
+          schema:
+            properties:
+              category:
+                type: string
+              customer_issue:
+                type: string
+              next_action:
+                type: string
+              summary:
+                type: string
+            required:
+            - summary
+            - category
+            - customer_issue
+            - next_action
+            type: object
+        structured_output_enabled: true
+        title: LLM
+        type: llm
+        vision:
+          enabled: false
+      height: 115
+      id: '1790606841954'
+      position:
+        x: 447.4443011560161
+        y: 275.2587055515218
+      positionAbsolute:
+        x: 447.4443011560161
+        y: 275.2587055515218
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 0
+    - data:
+        outputs:
+        - value_selector:
+          - '1790612398490'
+          - summary
+          value_type: string
+          variable: summary
+        - value_selector:
+          - '1790612398490'
+          - category
+          value_type: string
+          variable: category
+        - value_selector:
+          - '1790612398490'
+          - customer_issue
+          value_type: string
+          variable: customer_issue
+        - value_selector:
+          - '1790612398490'
+          - next_action
+          value_type: string
+          variable: next_action
+        selected: false
+        title: 出力
+        type: end
+      height: 164
+      id: '1790609753819'
+      position:
+        x: 1231.8736522031224
+        y: 275.2587055515218
+      positionAbsolute:
+        x: 1231.8736522031224
+        y: 275.2587055515218
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 0
+    - data:
+        code: "import json\nimport re\n\ndef main(text: str) -> dict:\n    # <think>...</think>\
+          \ がある場合は除去\n    cleaned = re.sub(r\"<think>.*?</think>\", \"\", text, flags=re.S).strip()\n\
+          \n    # \`\`\`json ... \`\`\` がある場合も除去\n    cleaned = re.sub(r\"^\`\`\`json\\s*\"\
+          , \"\", cleaned)\n    cleaned = re.sub(r\"\\s*\`\`\`$\", \"\", cleaned)\n\n\
+          \    data = json.loads(cleaned)\n\n    return {\n        \"summary\": data.get(\"\
+          summary\", \"\"),\n        \"category\": data.get(\"category\", \"\"),\n\
+          \        \"customer_issue\": data.get(\"customer_issue\", \"\"),\n     \
+          \   \"next_action\": data.get(\"next_action\", \"\"),\n    }"
+        code_language: python3
+        outputs:
+          category:
+            children: null
+            type: string
+          customer_issue:
+            children: null
+            type: string
+          next_action:
+            children: null
+            type: string
+          summary:
+            children: null
+            type: string
+        selected: false
+        title: コード実行
+        type: code
+        variables:
+        - value_selector:
+          - '1790606841954'
+          - text
+          value_type: string
+          variable: text
+      height: 50
+      id: '1790612398490'
+      position:
+        x: 851.2943826911287
+        y: 275.2587055515218
+      positionAbsolute:
+        x: 851.2943826911287
+        y: 275.2587055515218
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    viewport:
+      x: 76.9346445997087
+      y: 136.54307492457642
+      zoom: 0.5447813654056152
+  rag_pipeline_variables: []
