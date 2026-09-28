@@ -29,7 +29,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 
 ### Dify営業問い合わせ分析Workflow
 
-![Dify営業問い合わせ分析Workflow](docs/images/07-dify-workflow.jpg)
+![Dify営業問い合わせ分析Workflow](docs/images/07-dify-workflow.png)
 
 ## 想定課題
 
