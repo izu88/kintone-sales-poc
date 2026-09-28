@@ -185,14 +185,20 @@ n8n/
 
 ## 次のPhase
 
-n8nによる受付・入力検証・kintone登録までをPhase 2として完了しています。
+n8nによる受付・入力検証・kintone登録までをPhase 2として完了し、Phase 3ではDifyによる問い合わせ分析とWorkflow API実行まで確認しました。
 
-次はDifyを追加し、問い合わせ内容について次の処理を行う予定です。
+次はPhase 4として、n8nからDify APIを呼び出し、AI分析結果をkintoneへ登録します。
 
-- 要約
-- カテゴリ分類
-- 顧客課題抽出
-- 次回アクション生成
-- JSON構造化
+```text
+Web問い合わせ
+↓
+n8n
+↓
+Dify API
+↓
+n8n
+↓
+kintone
+```
 
-最終的には `Web問い合わせ → n8n → Dify / LLM → n8n → kintone → 担当者通知` の統合PoCを目指します。
+Dify側の詳細は [Dify連携ドキュメント](dify.md) を参照してください。
