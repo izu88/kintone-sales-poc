@@ -171,7 +171,7 @@ PoCで利用したOpenRouterモデルはDifyのStructured Outputへネイティ�
 
 公開Workflow APIから4項目が実値で返ることまで確認済みです。
 
-![Dify営業問い合わせ分析Workflow](images/07-dify-workflow.jpg)
+![Dify営業問い合わせ分析Workflow](images/07-dify-workflow.png)
 
 詳細は [Dify連携ドキュメント](dify.md) を参照してください。
 
