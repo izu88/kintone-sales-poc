@@ -1,13 +1,13 @@
 # kintone-sales-poc
 
-BtoB営業部門の商談管理を題材にした、kintone + n8n 業務改善PoCです。
+BtoB営業部門の商談管理を題材にした、kintone + n8n + Dify 業務改善PoCです。
 
 ## 目的
 
 Excel・メール・個人管理に分散した営業情報をkintoneへ集約し、
 商談進捗、担当者、次回対応、商談確度、金額などを一元管理します。
 
-あわせて、n8nでWeb問い合わせを受け付け、入力チェック後にkintoneへ商談を自動登録するフローを構築しています。
+あわせて、n8nでWeb問い合わせを受け付け、Difyで問い合わせ内容をAI分析し、kintoneへ商談を自動登録する構成を段階的に検証しています。
 
 ## デモ
 
@@ -26,6 +26,10 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 ### n8n問い合わせ自動登録フロー
 
 ![n8n問い合わせ自動登録フロー](docs/images/06-n8n-workflow.png)
+
+### Dify営業問い合わせ分析Workflow
+
+![Dify営業問い合わせ分析Workflow](docs/images/07-dify-workflow.jpg)
 
 ## 想定課題
 
@@ -51,7 +55,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 - [x] kintone編のポートフォリオ仕上げ
 - [x] n8n連携（Webhook → 入力検証 → kintone自動登録）
 - [x] n8n正常系 / 入力エラー / APIエラー検証
-- [ ] Dify連携
+- [x] Dify連携（要約 / 分類 / 顧客課題抽出 / 次回アクション生成 / API実行）
 - [ ] n8n + Dify + kintone統合PoC
 
 ## PoC範囲
@@ -63,8 +67,10 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 5. REST API連携
 6. n8n Webhook / kintone自動登録
 7. 入力・APIエラーハンドリング
-8. テスト
-9. As-Is / To-Be整理
+8. Difyによる問い合わせAI分析
+9. Dify Workflow API実行
+10. テスト
+11. As-Is / To-Be整理
 
 ## JavaScriptカスタマイズ
 
@@ -116,6 +122,24 @@ kintone APIトークンはWorkflow JSONへ直接保存せず、n8n Credentials�
 
 セットアップ、Workflow構成、Webhook、テスト結果の詳細は `docs/n8n.md` を参照してください。
 
+## Dify連携
+
+Dify Workflowで問い合わせ本文を分析し、`summary` / `category` / `customer_issue` / `next_action` の4項目へ構造化します。
+
+```text
+ユーザー入力
+↓
+LLM
+↓
+コード実行
+↓
+出力
+```
+
+PoCで使用したモデルではStructured Outputがネイティブ対応しなかったため、LLMのJSON出力をCode Nodeで解析するフォールバックを実装しました。公開Workflow APIから4項目を正常取得できることまで確認しています。
+
+Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.md` を参照してください。
+
 ## ポートフォリオ
 
 - ケーススタディ: `docs/portfolio.md`
@@ -160,12 +184,16 @@ kintone APIトークンはWorkflow JSONへ直接保存せず、n8n Credentials�
 │  ├─ portfolio.md
 │  ├─ rest-api.md
 │  ├─ n8n.md
+│  ├─ dify.md
 │  ├─ screenshots.md
 │  └─ test-plan.md
 ├─ n8n/
 │  ├─ compose.yml
 │  └─ workflows/
 │     └─ sales-inquiry-to-kintone.json
+├─ dify/
+│  └─ workflows/
+│     └─ sales-inquiry-analyzer.yml
 └─ src/
    ├─ customization/
    │  └─ sales-poc.js
@@ -179,9 +207,8 @@ kintone APIトークンはWorkflow JSONへ直接保存せず、n8n Credentials�
 
 ## 今後の拡張
 
-- Difyによる問い合わせ要約・分類・顧客課題抽出
-- LLMによる次回アクション生成とJSON構造化
 - n8n + Dify + kintoneの統合
+- Dify出力をkintone項目へ自動マッピング
 - Teams等への担当者通知
 
 ## 注意
