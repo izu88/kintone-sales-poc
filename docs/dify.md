@@ -24,7 +24,7 @@ LLM
 出力
 ```
 
-![Dify営業問い合わせ分析Workflow](images/07-dify-workflow.jpg)
+![Dify営業問い合わせ分析Workflow](images/07-dify-workflow.png)
 
 ## Nodeの役割
 
