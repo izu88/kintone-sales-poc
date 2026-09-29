@@ -31,6 +31,10 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 
 ![Dify営業問い合わせ分析Workflow](docs/images/07-dify-workflow.png)
 
+### n8n + Dify + kintone統合Workflow
+
+![n8n + Dify + kintone統合Workflow](docs/images/08-n8n-dify-kintone-workflow.png)
+
 ## 想定課題
 
 - 商談情報が複数ツールに分散している
@@ -56,7 +60,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 - [x] n8n連携（Webhook → 入力検証 → kintone自動登録）
 - [x] n8n正常系 / 入力エラー / APIエラー検証
 - [x] Dify連携（要約 / 分類 / 顧客課題抽出 / 次回アクション生成 / API実行）
-- [ ] n8n + Dify + kintone統合PoC
+- [x] n8n + Dify + kintone統合PoC
 
 ## PoC範囲
 
@@ -69,8 +73,9 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 7. 入力・APIエラーハンドリング
 8. Difyによる問い合わせAI分析
 9. Dify Workflow API実行
-10. テスト
-11. As-Is / To-Be整理
+10. n8n → Dify → kintone統合
+11. 正常系 / 入力エラー / AI解析エラー / APIエラー検証
+12. As-Is / To-Be整理
 
 ## JavaScriptカスタマイズ
 
@@ -153,6 +158,7 @@ Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.
 | 担当者名 | `contact_name` |
 | 商談名 | `deal_name` |
 | 流入経路 | `lead_source` |
+| 問い合わせカテゴリ | `inquiry_category` |
 | 顧客課題 | `customer_issue` |
 | 商談メモ | `deal_memo` |
 | 担当営業 | `sales_rep` |
@@ -185,12 +191,14 @@ Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.
 │  ├─ rest-api.md
 │  ├─ n8n.md
 │  ├─ dify.md
+│  ├─ integration.md
 │  ├─ screenshots.md
 │  └─ test-plan.md
 ├─ n8n/
 │  ├─ compose.yml
 │  └─ workflows/
-│     └─ sales-inquiry-to-kintone.json
+│     ├─ sales-inquiry-to-kintone.json
+│     └─ sales-inquiry-to-dify-kintone.json
 ├─ dify/
 │  └─ workflows/
 │     └─ sales-inquiry-analyzer.yml
@@ -207,9 +215,10 @@ Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.
 
 ## 今後の拡張
 
-- n8n + Dify + kintoneの統合
-- Dify出力をkintone項目へ自動マッピング
 - Teams等への担当者通知
+- DifyへのRAG追加
+- 担当営業の自動アサイン
+- 処理時間・エラー率・AI利用量の可視化
 
 ## 注意
 
