@@ -120,7 +120,7 @@ APIで作成したレコードについて、商談確度・次回アクショ�
 
 n8n Community EditionをDocker Composeでローカル起動し、Web問い合わせからkintone登録までのWorkflowを構築しました。
 
-\`\`\`text
+```text
 Webhook
 ↓
 問い合わせデータ整形
@@ -134,14 +134,14 @@ Webhook
   kintone API結果判定
     ├─ success → 201 登録成功
     └─ error   → 502 APIエラー
-\`\`\`
+```
 
 Production Webhookで次を実機確認しています。
 
-- 正常登録：\`201 Created\`
-- 必須項目不足：\`400 Bad Request\`
-- kintone API失敗：\`502 Bad Gateway\`
-- 正常登録時に\`recordId\` / \`revision\` を返却
+- 正常登録：`201 Created`
+- 必須項目不足：`400 Bad Request`
+- kintone API失敗：`502 Bad Gateway`
+- 正常登録時に`recordId` / `revision` を返却
 - APIトークンをWorkflow JSONへ直接保存せず、n8n Credentialsへ分離
 
 ![n8n問い合わせ自動登録フロー](images/06-n8n-workflow.png)
@@ -174,6 +174,37 @@ PoCで利用したOpenRouterモデルはDifyのStructured Outputへネイティ�
 ![Dify営業問い合わせ分析Workflow](images/07-dify-workflow.png)
 
 詳細は [Dify連携ドキュメント](dify.md) を参照してください。
+
+### n8n + Dify + kintone統合
+
+Webhookで受け取った問い合わせをn8nで入力検証し、Dify Workflow APIでAI分析した後、分析結果をkintoneへ自動登録するE2Eフローを実装しました。
+
+```text
+Web問い合わせ
+↓
+n8n
+↓
+Dify API
+├─ 要約
+├─ カテゴリ分類
+├─ 顧客課題抽出
+└─ 次回アクション生成
+↓
+n8n
+↓
+kintone
+```
+
+![n8n + Dify + kintone統合Workflow](images/08-n8n-dify-kintone-workflow.svg)
+
+実機テストでは、正常登録に加えて次の異常系まで確認しています。
+
+- 必須項目不足 → `400 Bad Request`
+- Dify停止 / 接続不能 → `502 Bad Gateway`
+- kintone API失敗 → `502 Bad Gateway`
+- 正常系ではAI生成した要約・カテゴリ・顧客課題・次回アクションをkintoneへ反映
+
+詳細は [統合ドキュメント](integration.md) を参照してください。
 
 ## 技術選定の考え方
 
