@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+<title id="title">n8n + Dify + kintone integrated workflow</title>
+<desc id="desc">Webhook input is validated, analyzed by Dify, normalized, and registered to kintone with 400 and 502 error branches.</desc>
+<rect width="1600" height="720" fill="#17191c"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#f3f4f6">
+  <text x="70" y="80" font-size="30" font-weight="700">n8n + Dify + kintone 統合Workflow</text>
+  <text x="70" y="116" font-size="16" fill="#aab0b7">Webhook → 入力検証 → AI分析 → kintone登録 / 400・502エラーハンドリング</text>
+</g>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+    <path d="M0,0 L0,6 L9,3 z" fill="#4ade80"/>
+  </marker>
+  <marker id="arrowGray" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+    <path d="M0,0 L0,6 L9,3 z" fill="#8b949e"/>
+  </marker>
+  <style>
+    .node{fill:#24272b;stroke:#4ade80;stroke-width:2}
+    .err{fill:#24272b;stroke:#9ca3af;stroke-width:2}
+    .label{font:600 15px Arial,Helvetica,sans-serif;fill:#f3f4f6;text-anchor:middle}
+    .sub{font:12px Arial,Helvetica,sans-serif;fill:#aab0b7;text-anchor:middle}
+    .ok{fill:#4ade80;font:700 18px Arial,Helvetica,sans-serif}
+    .line{stroke:#4ade80;stroke-width:2.5;fill:none;marker-end:url(#arrow)}
+    .eline{stroke:#8b949e;stroke-width:2;fill:none;marker-end:url(#arrowGray)}
+  </style>
+</defs>
+
+<!-- main nodes -->
+<g>
+  <rect class="node" x="70" y="260" rx="12" width="150" height="84"/>
+  <text class="label" x="145" y="294">Webhook</text><text class="sub" x="145" y="318">POST /sales-inquiry</text><text class="ok" x="198" y="282">✓</text>
+
+  <rect class="node" x="270" y="260" rx="12" width="170" height="84"/>
+  <text class="label" x="355" y="294">問い合わせデータ整形</text><text class="sub" x="355" y="318">company / deal / text</text><text class="ok" x="418" y="282">✓</text>
+
+  <rect class="node" x="490" y="260" rx="12" width="160" height="84"/>
+  <text class="label" x="570" y="294">必須項目チェック</text><text class="sub" x="570" y="318">3 fields / AND</text><text class="ok" x="628" y="282">✓</text>
+
+  <rect class="node" x="700" y="260" rx="12" width="170" height="84"/>
+  <text class="label" x="785" y="294">Dify問い合わせ分析</text><text class="sub" x="785" y="318">Workflow API</text><text class="ok" x="848" y="282">✓</text>
+
+  <rect class="node" x="920" y="260" rx="12" width="150" height="84"/>
+  <text class="label" x="995" y="294">Dify結果判定</text><text class="sub" x="995" y="318">status = succeeded</text><text class="ok" x="1048" y="282">✓</text>
+
+  <rect class="node" x="1120" y="260" rx="12" width="150" height="84"/>
+  <text class="label" x="1195" y="294">AI結果整形</text><text class="sub" x="1195" y="318">4 AI fields</text><text class="ok" x="1248" y="282">✓</text>
+
+  <rect class="node" x="1320" y="260" rx="12" width="160" height="84"/>
+  <text class="label" x="1400" y="294">kintone商談登録</text><text class="sub" x="1400" y="318">REST API</text><text class="ok" x="1458" y="282">✓</text>
+</g>
+
+<!-- main arrows -->
+<path class="line" d="M220 302 H270"/><path class="line" d="M440 302 H490"/>
+<path class="line" d="M650 302 H700"/><path class="line" d="M870 302 H920"/>
+<path class="line" d="M1070 302 H1120"/><path class="line" d="M1270 302 H1320"/>
+
+<!-- final success chain -->
+<rect class="node" x="1220" y="470" rx="12" width="170" height="84"/>
+<text class="label" x="1305" y="504">kintone API結果判定</text><text class="sub" x="1305" y="528">200 ≤ status &lt; 300</text>
+<rect class="node" x="1430" y="470" rx="12" width="120" height="84"/>
+<text class="label" x="1490" y="504">201 登録成功</text><text class="sub" x="1490" y="528">recordId / revision</text>
+<path class="line" d="M1400 344 V420 H1305 V470"/>
+<path class="line" d="M1390 512 H1430"/>
+
+<!-- error branches -->
+<rect class="err" x="470" y="470" rx="12" width="200" height="84"/>
+<text class="label" x="570" y="504">400 入力エラー</text><text class="sub" x="570" y="528">required fields missing</text>
+<path class="eline" d="M570 344 V470"/>
+
+<rect class="err" x="790" y="470" rx="12" width="210" height="84"/>
+<text class="label" x="895" y="504">502 AI解析エラー</text><text class="sub" x="895" y="528">Dify failure / connection error</text>
+<path class="eline" d="M785 344 V410 H895 V470"/>
+<path class="eline" d="M995 344 V470"/>
+
+<rect class="err" x="1040" y="590" rx="12" width="210" height="84"/>
+<text class="label" x="1145" y="624">502 APIエラー</text><text class="sub" x="1145" y="648">kintone API failure</text>
+<path class="eline" d="M1305 554 V632 H1250"/>
+
+<g font-family="Arial, Helvetica, sans-serif">
+  <text x="70" y="680" font-size="13" fill="#8b949e">公開用図: 実サブドメイン・Credential ID・APIキーは掲載していません。</text>
+</g>
+</svg>

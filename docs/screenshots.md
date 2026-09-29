@@ -1,6 +1,6 @@
 # ポートフォリオ用スクリーンショット
 
-以下の7枚をポートフォリオ用に保存しています。
+以下の8枚をポートフォリオ用に保存しています。
 
 | ファイル | 内容 |
 | --- | --- |
@@ -11,6 +11,7 @@
 | `05-rest-api-list.png` | REST API一覧取得 |
 | `06-n8n-workflow.png` | n8n問い合わせ自動登録フロー全体 |
 | `07-dify-workflow.png` | Dify営業問い合わせ分析Workflow全体 |
+| `08-n8n-dify-kintone-workflow.svg` | n8n + Dify + kintone統合Workflow図（公開用） |
 
 ## 注意
 
