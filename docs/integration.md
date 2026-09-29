@@ -4,7 +4,7 @@
 
 Web問い合わせをn8nで受信し、Dify Workflow APIで問い合わせ本文をAI分析したうえで、分析結果をkintoneの商談レコードへ登録するPhase 4の統合PoCです。
 
-![n8n + Dify + kintone統合Workflow](images/08-n8n-dify-kintone-workflow.png)
+![n8n + Dify + kintone統合Workflow](images/08-n8n-dify-kintone-workflow.svg)
 
 ## 全体フロー
 
