@@ -200,29 +200,10 @@ PoC段階のため実測値ではありませんが、導入時には次をKPI�
 
 ## 今後の拡張
 
-### n8n + Dify + kintone統合
-
-Phase 4では既存のn8n WorkflowからDify Workflow APIを呼び出し、AI分析結果をkintoneへ登録します。
-
-```text
-問い合わせ
-↓
-n8n
-↓
-Dify API
-├─ 要約
-├─ 分類
-├─ 顧客課題抽出
-└─ 次回アクション生成
-↓
-n8n
-↓
-kintone
-↓
-担当営業へ通知
-```
-
-統合後は、通知やRAGなどを必要性に応じて追加します。
+- Teams等への担当者通知
+- DifyへのRAG追加
+- 担当営業の自動アサイン
+- 処理時間・エラー率・AI利用量の可視化
 
 ## このPoCで確認できたこと
 
@@ -235,5 +216,7 @@ kintone
 - Difyによる問い合わせ要約・分類・顧客課題抽出・次回アクション生成
 - Structured Output非対応モデルに対するCode Nodeフォールバック
 - Dify Workflow APIによる外部実行
+- n8n → Dify → kintoneのE2E自動化
+- Dify接続不能時のError Output分岐と502応答
 - 認証情報をGit管理から分離した開発構成
 - テストケースを定義した実機検証
