@@ -38,7 +38,7 @@ Webhook
         201 登録成功
 ```
 
-![n8n + Dify + kintone統合Workflow](images/08-n8n-dify-kintone-workflow.png)
+![n8n + Dify + kintone統合Workflow](images/08-n8n-dify-kintone-workflow.svg)
 
 ## Nodeの役割
 
