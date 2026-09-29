@@ -148,6 +148,7 @@ Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.
 ## ポートフォリオ
 
 - ケーススタディ: `docs/portfolio.md`
+- 応募・面談向け説明: `docs/application-pitch.md`
 - スクリーンショット一覧: `docs/screenshots.md`
 
 ## アプリの主なフィールド
@@ -188,6 +189,7 @@ Workflow構成、API実行、フォールバック処理の詳細は `docs/dify.
 │  ├─ to-be.md
 │  ├─ app-design.md
 │  ├─ portfolio.md
+│  ├─ application-pitch.md
 │  ├─ rest-api.md
 │  ├─ n8n.md
 │  ├─ dify.md
