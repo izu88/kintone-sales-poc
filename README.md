@@ -33,7 +33,7 @@ Excel・メール・個人管理に分散した営業情報をkintoneへ集約�
 
 ### n8n + Dify + kintone統合Workflow
 
-![n8n + Dify + kintone統合Workflow](docs/images/08-n8n-dify-kintone-workflow.png)
+![n8n + Dify + kintone統合Workflow](docs/images/08-n8n-dify-kintone-workflow.svg)
 
 ## 想定課題
 
